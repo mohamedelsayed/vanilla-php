@@ -2,6 +2,8 @@
 
 namespace Inc\Router;
 
+use Inc\Response\Response;
+
 class Router implements RouterInterface
 {
     /**
@@ -86,13 +88,18 @@ class Router implements RouterInterface
      */
     public function direct($uri, $requestType)
     {
-        if (array_key_exists($uri, $this->routes[$requestType])) {
-            return $this->callAction(
-                ...explode('@', $this->routes[$requestType][$uri])
-            );
+        if (isset($_SERVER['HTTP_ACCEPT']) && $_SERVER['HTTP_ACCEPT']) {
+            if (array_key_exists($uri, $this->routes[$requestType])) {
+                return $this->callAction(
+                    ...explode('@', $this->routes[$requestType][$uri])
+                );
+            }
+        } else {
+            $message = 'The API accepts only requests with an accept header.';
+            return $this->response(false, $message, Response::HTTP_NOT_ACCEPTABLE);
         }
-
-        throw new Exception('No route defined for this URI.');
+        $message = 'No route defined for this URI.';
+        return $this->response(false, $message, Response::HTTP_NOT_FOUND);
     }
 
     /**
@@ -109,11 +116,18 @@ class Router implements RouterInterface
         $controller = new $controller();
 
         if (!method_exists($controller, $action)) {
-            throw new Exception(
-                "{$controller} does not respond to the {$action} action."
-            );
+            $message ="{$controller} does not respond to the {$action} action.";
+            return $this->response(false, $message, Response::HTTP_NOT_FOUND);          
         }
 
         return $controller->$action();
+    }
+
+    protected function response($ok = false, $message = null, $statusCode = Response::HTTP_BAD_REQUEST)
+    {
+        $data['ok'] = $ok;
+        $data['message'] = $message;
+        $response = new Response();
+        $response->responseJson($data, $statusCode);
     }
 }

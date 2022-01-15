@@ -7,7 +7,7 @@ class User extends Model
     protected $table = 'users';
 
     protected $fillable = [
-        'mail',
+        'email',
         'name',
         'password',
     ];
@@ -23,14 +23,20 @@ class User extends Model
         }
         parent::insert($parameters);
     }
-    public function getByEmail($mail=null)
+
+    public function update($parameters)
     {
-        if($mail){
-           return $this->where(["mail = '$mail'"])->selectOne();
+        if (isset($parameters['password'])) {
+            $parameters['password'] = '"'.password_hash($parameters['password'], PASSWORD_DEFAULT).'"';
+        }
+        parent::update($parameters);
+    }
+
+    public function getByEmail($email = null)
+    {
+        if ($email) {
+            return $this->where(["email = '$email'"])->selectOne();
         }
         return null;
-    }
-    public function getObject(){
-
     }
 }
