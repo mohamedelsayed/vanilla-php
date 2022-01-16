@@ -77,11 +77,19 @@ class ListsController extends BaseController
         $data['errors'] = null;
         $data['data'] = null;
         if ($isValid) {
-            $this->model->where(["id = $id"])->update(['name' => '"'.$name.'"']);
-            $data['ok'] = true;
-            $data['data']['list'] =  $params;
-            $data['message'] = 'Success';
-            $statusCode = Response::HTTP_OK;
+            $list = $this->model->getById($id);
+            if ($list) {
+                $listModel = new ListModel();
+                $listModel->where(["id = $id"])->update(['name' => '"' . $name . '"']);
+                $data['ok'] = true;
+                $data['data']['list'] =  $params;
+                $data['message'] = 'Success';
+                $statusCode = Response::HTTP_OK;
+            } else {
+                $data['ok'] = false;
+                $data['message'] = 'List is not exist.';
+                $statusCode = Response::HTTP_BAD_REQUEST;
+            }
         } else {
             $data['ok'] = false;
             $data['message'] = 'Fail';
@@ -107,10 +115,18 @@ class ListsController extends BaseController
         $data['errors'] = null;
         $data['data'] = null;
         if ($isValid) {
-            $this->model->where(["id = $id"])->delete();
-            $data['ok'] = true;
-            $data['message'] = 'Success';
-            $statusCode = Response::HTTP_OK;
+            $list = $this->model->getById($id);
+            if ($list) {
+                $listModel = new ListModel();
+                $listModel->where(["id = $id"])->delete();
+                $data['ok'] = true;
+                $data['message'] = 'Success';
+                $statusCode = Response::HTTP_OK;
+            } else {
+                $data['ok'] = false;
+                $data['message'] = 'List is not exist.';
+                $statusCode = Response::HTTP_BAD_REQUEST;
+            }
         } else {
             $data['ok'] = false;
             $data['message'] = 'Fail';

@@ -17,4 +17,15 @@ class ListModel extends Model
     {
         parent::update($parameters);
     }
+
+    public function getById($id = null)
+    {
+        if ($id) {
+            $data= $this->where(["id = $id"])->selectOne();
+            if($data && isset($data[0])){
+                return $data[0];
+            }
+        }
+        return null;
+    }
 }
