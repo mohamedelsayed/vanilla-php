@@ -1,4 +1,4 @@
-#Vanilla PHP
+# Vanilla PHP
 ## Dependencies
 - php: +7.3
 - composer install
@@ -8,11 +8,11 @@
 
 php -S localhost:8080 -t .
 
-#api documentation:
-##users:
+# api documentation:
+## users:
 https://documenter.getpostman.com/view/4081658/UVXjLGUc
 
-##lists
+## lists
 https://documenter.getpostman.com/view/4081658/UVXjLGUb
 
-##postman collections exists in repo 
+## postman collections exists in repo 
