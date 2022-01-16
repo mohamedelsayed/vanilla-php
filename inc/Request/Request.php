@@ -29,7 +29,12 @@ class Request implements RequestInterface
      */
     public function get($key, $default = null)
     {
-        return $this->sanitizeInput($this->data[$key]) ?? $default;
+        $value = $default;
+        if (isset($this->data[$key])) {
+            $value = $this->data[$key];
+        }
+        $value = $this->sanitizeInput($value);
+        return $value;
     }
 
     /**
@@ -40,7 +45,8 @@ class Request implements RequestInterface
     public static function uri()
     {
         return trim(
-            parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'
+            parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH),
+            '/'
         );
     }
 
@@ -53,11 +59,10 @@ class Request implements RequestInterface
     {
         return $_SERVER['REQUEST_METHOD'];
     }
-    
+
     protected function sanitizeInput($input)
-    { 
+    {
         $input = filter_var($input, FILTER_SANITIZE_STRING);
         return $input;
     }
-
 }

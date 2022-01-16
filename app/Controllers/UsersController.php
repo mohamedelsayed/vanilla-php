@@ -17,6 +17,7 @@ class UsersController extends BaseController
     protected $model;
     protected $request;
     protected $response;
+    
     /**
      * UsersController constructor.
      *
@@ -29,6 +30,7 @@ class UsersController extends BaseController
         $this->request = new Request();
         $this->response = new Response();
     }
+
     /**
      * Store a new user in the database.
      */
@@ -70,6 +72,7 @@ class UsersController extends BaseController
         }
         return $this->response->responseJson($data, $statusCode);
     }
+    
     public function resetPassword()
     {
         $validator = new Validator();
