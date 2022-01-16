@@ -3,6 +3,7 @@
 - php: +7.3
 - composer install
 - import database exists in repo
+- to test api in post you can import postman collections exists in repo 
 
 # To run system 
 
@@ -14,5 +15,3 @@ https://documenter.getpostman.com/view/4081658/UVXjLGUc
 
 ## lists
 https://documenter.getpostman.com/view/4081658/UVXjLGUb
-
-## postman collections exists in repo 
