@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\Item;
 use App\Models\ListModel;
 use Inc\Request\Request;
 use Inc\Response\Response;
@@ -135,4 +136,43 @@ class ListsController extends BaseController
         }
         return $this->response->responseJson($data, $statusCode);
     }
+
+    /**
+     * add item to  a list in the database.
+     */
+    public function addItem()
+    {
+        $validator = new Validator();
+        $rules = [
+            'list_id' => 'required | Integer',
+            'name' => 'required | maxlength(155)',
+        ];
+        $validator->add($rules);
+        $list_id = $this->request->get('list_id');
+        $name = $this->request->get('name');
+        $params = ['list_id' => $list_id, 'name'=>$name];
+        $isValid = $validator->validate($params);
+        $data['errors'] = null;
+        $data['data'] = null;
+        if ($isValid) {
+            $list = $this->model->getById($list_id);
+            if ($list) {
+                $item = new Item();
+                $item->insert($params);
+                $data['ok'] = true;
+                $data['message'] = 'Success';
+                $statusCode = Response::HTTP_OK;
+            } else {
+                $data['ok'] = false;
+                $data['message'] = 'List is not exist.';
+                $statusCode = Response::HTTP_BAD_REQUEST;
+            }
+        } else {
+            $data['ok'] = false;
+            $data['message'] = 'Fail';
+            $data['errors'] = $validator->getMessages();
+            $statusCode = Response::HTTP_BAD_REQUEST;
+        }
+        return $this->response->responseJson($data, $statusCode);
+    }    
 }

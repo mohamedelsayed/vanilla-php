@@ -9,3 +9,4 @@ $router->post('set-password', 'UsersController@setPassword'); //TODO add rate li
 $router->post('lists', 'ListsController@store');
 $router->post('lists/update', 'ListsController@update');
 $router->post('lists/delete', 'ListsController@destory');
+$router->post('lists/items/add', 'ListsController@addItem');

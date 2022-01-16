@@ -2,10 +2,11 @@
 namespace App\Models;
 class Item extends Model
 {
-    protected $table = 'lists';
+    protected $table = 'items';
 
     protected $fillable = [
         'name',
+        'list_id',
     ];
 
     public function insert($parameters)
